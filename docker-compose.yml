@@ -1,0 +1,16 @@
+version: '3'
+services:
+  app:
+    build: .
+    working_dir: /repo
+    volumes:
+      - daomikuji:/repo
+    environment:
+      GITHUB_USER_NAME: ${GITHUB_USER_NAME}
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+      GITHUB_EMAIL: ${GITHUB_EMAIL}
+    ports:
+      - 8545:8545
+    tty: true
+volumes:
+  daomikuji:
