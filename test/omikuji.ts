@@ -1,7 +1,7 @@
-const { expect } = require("chai");
-const { ethers } = require("hardhat");
+import { expect } from "chai";
+import { ethers } from "hardhat";
 
-deployOmikuji = async () => {
+const deployOmikuji = async () => {
   const Omikuji = await ethers.getContractFactory("Omikuji");
   const omikuji = await Omikuji.deploy("DAOmikuji", "DMKJ");
   await omikuji.deployed();
