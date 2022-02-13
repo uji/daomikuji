@@ -1,19 +1,26 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-describe("Greeter", function () {
-  it("Should return the new greeting once it's changed", async function () {
-    const Greeter = await ethers.getContractFactory("Greeter");
-    const greeter = await Greeter.deploy("Hello, world!");
-    await greeter.deployed();
+deployOmikuji = async () => {
+  const Omikuji = await ethers.getContractFactory("Omikuji");
+  const omikuji = await Omikuji.deploy("DAOmikuji", "DMKJ");
+  await omikuji.deployed();
+  return omikuji;
+};
 
-    expect(await greeter.greet()).to.equal("Hello, world!");
+describe("Omikuji", function () {
+  it("Should be able to mint NFT", async function () {
+    const omikuji = await deployOmikuji();
 
-    const setGreetingTx = await greeter.setGreeting("Hola, mundo!");
+    const [account] = await ethers.getSigners();
+    const addr = account.address;
 
-    // wait until the transaction is mined
-    await setGreetingTx.wait();
+    const beforeBalance = await omikuji.balanceOf(addr);
 
-    expect(await greeter.greet()).to.equal("Hola, mundo!");
+    const tx = await omikuji.mint(addr, "test");
+    await tx.wait();
+
+    const afterBalance = await omikuji.balanceOf(addr);
+    expect(afterBalance - beforeBalance).equal(1);
   });
 });
